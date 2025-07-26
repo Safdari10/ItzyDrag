@@ -37,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _isDropped = false;
+  List<String> matchedAnimals = []; // to store the matched animals
 
   @override
   Widget build(BuildContext context) {
