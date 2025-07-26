@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               _isDropped
                   ? 'Great job! You dropped the box!'
-                  : 'Drag the blue box into the target area.',
+                  : 'Drag the animal into its home.',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 40),
@@ -61,51 +61,55 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Draggable blue box
-                Draggable<Color>(
-                  data: Colors.blue,
-                  feedback: Container(
-                    width: 80,
-                    height: 80,
-                    // ignore: deprecated_member_use
-                    color: Colors.blue.withOpacity(0.7),
-                  ),
-                  childWhenDragging: Container(
-                    width: 80,
-                    height: 80,
-                    color: Colors.grey,
-                  ),
-                  child: Container(width: 80, height: 80, color: Colors.blue),
-                ),
-                const SizedBox(width: 60),
-                // Drop target
-                DragTarget<Color>(
-                  onAcceptWithDetails: (color) {
-                    setState(() {
-                      _isDropped = true;
-                    });
-                  },
-                  builder: (context, candidateData, rejectedData) {
-                    return Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: _isDropped ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          _isDropped ? 'Success!' : 'Drop here',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                // Draggable animals
+                Column(
+                  children: animalHomePairs.map((pair) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Draggable<String>(
+                        data: pair['animal']!,
+                        feedback: Image.asset(
+                          pair['animal']!,
+                          width: 80,
+                          height: 80,
+                        ),
+                        childWhenDragging: Opacity(
+                          opacity: 0.3,
+                          child: Image.asset(
+                            pair['animal']!,
+                            width: 80,
+                            height: 80,
                           ),
+                        ),
+                        child: Image.asset(
+                          pair['animal']!,
+                          width: 80,
+                          height: 80,
                         ),
                       ),
                     );
-                  },
+                  }).toList(),
+                ),
+                const SizedBox(width: 60),
+                // Drop targets (homes)
+                Column(
+                  children: animalHomePairs.map((pair) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DragTarget<String>(
+                        builder: (context, candidateData, rejectedData) {
+                          return Image.asset(
+                            pair['home']!,
+                            width: 80,
+                            height: 80,
+                          );
+                        },
+                        onAccept: (receivedAnimal) {
+                          // Matching logic will go here
+                        },
+                      ),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
