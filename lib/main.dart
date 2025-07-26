@@ -65,6 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Draggable animals
                 Column(
                   children: animalHomePairs.map((pair) {
+                    if (matchedAnimals.contains(pair["animal"])) {
+                      return const SizedBox(height: 80); // Hide matched animal
+                    }
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Draggable<String>(
