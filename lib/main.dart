@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itzy_drag/widgets/animal_draggable.dart';
+import 'package:itzy_drag/widgets/home_target.dart';
 
 final List<Map<String, String>> animalHomePairs = [
   {"animal": "assets/images/cat.jpg", "home": "assets/images/house.jpg"},
@@ -79,34 +80,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Drop targets (homes)
                 Column(
                   children: animalHomePairs.map((pair) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DragTarget<String>(
-                        builder: (context, candidateData, rejectedData) {
-                          return Image.asset(
-                            pair['home']!,
-                            width: 80,
-                            height: 80,
-                          );
-                        },
-                        onAcceptWithDetails: (recievedAnimal) {
-                          if (recievedAnimal.data == pair['animal']) {
-                            setState(() {
-                              matchedAnimals.add(recievedAnimal.data);
-                              // Optionally, check if all animals are matched and show a message
-                              if (matchedAnimals.length ==
-                                  animalHomePairs.length) {
-                                _isDropped = true;
-                              }
-                            });
-                          } else {
-                            // Optionally, show feedback for incorrect match
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Try again!')),
-                            );
+                    return HomeTarget(
+                      homeImage: pair["home"]!,
+                      expectedAnimal: pair["animal"]!,
+                      onMatched: (animal) {
+                        setState(() {
+                          matchedAnimals.add(animal);
+                          if (matchedAnimals.length == animalHomePairs.length) {
+                            _isDropped = true;
                           }
-                        },
-                      ),
+                        });
+                      },
                     );
                   }).toList(),
                 ),
