@@ -108,8 +108,22 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 80,
                           );
                         },
-                        onAcceptWithDetails: (receivedAnimal) {
-                          // Matching logic will go here
+                        onAcceptWithDetails: (recievedAnimal) {
+                          if (recievedAnimal.data == pair['animal']) {
+                            setState(() {
+                              matchedAnimals.add(recievedAnimal.data);
+                              // Optionally, check if all animals are matched and show a message
+                              if (matchedAnimals.length ==
+                                  animalHomePairs.length) {
+                                _isDropped = true;
+                              }
+                            });
+                          } else {
+                            // Optionally, show feedback for incorrect match
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Try again!')),
+                            );
+                          }
                         },
                       ),
                     );
