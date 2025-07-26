@@ -138,6 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   setState(() {
                     _isDropped = false;
+                    matchedAnimals.clear();
                   });
                 },
                 child: const Text('Play Again'),
