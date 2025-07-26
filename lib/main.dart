@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import "package:audioplayers/audioplayers.dart";
+import 'package:itzy_drag/widgets/animal_draggable.dart';
+import 'package:itzy_drag/widgets/home_target.dart';
+
+final List<Map<String, String>> animalHomePairs = [
+  {"animal": "assets/images/cat.png", "home": "assets/images/house.png"},
+  {"animal": "assets/images/dog.png", "home": "assets/images/kennel.png"},
+  {"animal": "assets/images/bird.png", "home": "assets/images/nest.png"},
+];
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +40,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _isDropped = false;
+  List<String> matchedAnimals = []; // to store the matched animals
+  static final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // Game instructions or success message
             Text(
               _isDropped
-                  ? 'Great job! You dropped the box!'
-                  : 'Drag the blue box into the target area.',
+                  ? 'Great job! You matched all the animals!'
+                  : 'Drag the animal into its home.',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 40),
@@ -55,51 +66,40 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Draggable blue box
-                Draggable<Color>(
-                  data: Colors.blue,
-                  feedback: Container(
-                    width: 80,
-                    height: 80,
-                    // ignore: deprecated_member_use
-                    color: Colors.blue.withOpacity(0.7),
-                  ),
-                  childWhenDragging: Container(
-                    width: 80,
-                    height: 80,
-                    color: Colors.grey,
-                  ),
-                  child: Container(width: 80, height: 80, color: Colors.blue),
+                // Draggable animals
+                Column(
+                  children: animalHomePairs.map((pair) {
+                    if (matchedAnimals.contains(pair["animal"])) {
+                      return const SizedBox(height: 80); // Hide matched animal
+                    }
+                    return AnimalDraggable(
+                      imagePath: pair["animal"]!,
+                      isMatched: matchedAnimals.contains(pair["animal"]),
+                    );
+                  }).toList(),
                 ),
                 const SizedBox(width: 60),
-                // Drop target
-                DragTarget<Color>(
-                  onAcceptWithDetails: (color) {
-                    setState(() {
-                      _isDropped = true;
-                    });
-                  },
-                  builder: (context, candidateData, rejectedData) {
-                    return Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: _isDropped ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          _isDropped ? 'Success!' : 'Drop here',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
+                // Drop targets (homes)
+                Column(
+                  children: animalHomePairs.map((pair) {
+                    return HomeTarget(
+                      homeImage: pair["home"]!,
+                      expectedAnimal: pair["animal"]!,
+                      onMatched: (animal) async {
+                        setState(() {
+                          matchedAnimals.add(animal);
+                          if (matchedAnimals.length == animalHomePairs.length) {
+                            _isDropped = true;
+                          }
+                        });
+                        if (matchedAnimals.length == animalHomePairs.length) {
+                          await player.play(
+                            AssetSource('sounds/levelfinish.mp3'),
+                          );
+                        }
+                      },
                     );
-                  },
+                  }).toList(),
                 ),
               ],
             ),
@@ -110,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   setState(() {
                     _isDropped = false;
+                    matchedAnimals.clear();
                   });
                 },
                 child: const Text('Play Again'),
