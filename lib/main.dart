@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itzy_drag/widgets/animal_draggable.dart';
 
 final List<Map<String, String>> animalHomePairs = [
   {"animal": "assets/images/cat.jpg", "home": "assets/images/house.jpg"},
@@ -68,29 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (matchedAnimals.contains(pair["animal"])) {
                       return const SizedBox(height: 80); // Hide matched animal
                     }
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Draggable<String>(
-                        data: pair['animal']!,
-                        feedback: Image.asset(
-                          pair['animal']!,
-                          width: 80,
-                          height: 80,
-                        ),
-                        childWhenDragging: Opacity(
-                          opacity: 0.3,
-                          child: Image.asset(
-                            pair['animal']!,
-                            width: 80,
-                            height: 80,
-                          ),
-                        ),
-                        child: Image.asset(
-                          pair['animal']!,
-                          width: 80,
-                          height: 80,
-                        ),
-                      ),
+                    return AnimalDraggable(
+                      imagePath: pair["animal"]!,
+                      isMatched: matchedAnimals.contains(pair["animal"]),
                     );
                   }).toList(),
                 ),
