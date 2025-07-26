@@ -14,11 +14,13 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class HomeTarget extends StatelessWidget {
   final String homeImage;
   final String expectedAnimal;
   final Function(String) onMatched;
+  static final player = AudioPlayer();
 
   const HomeTarget({
     super.key,
@@ -53,13 +55,15 @@ class HomeTarget extends StatelessWidget {
             ),
           );
         },
-        onAcceptWithDetails: (details) {
+        onAcceptWithDetails: (details) async {
           if (details.data == expectedAnimal) {
+            await player.play(AssetSource('sounds/success.mp3'));
             onMatched(details.data);
           } else {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(const SnackBar(content: Text('Try again!')));
+            await player.play(AssetSource('sounds/error.mp3'));
           }
         },
       ),
