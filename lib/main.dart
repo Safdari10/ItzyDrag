@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 80,
                           );
                         },
-                        onAccept: (receivedAnimal) {
+                        onAcceptWithDetails: (receivedAnimal) {
                           // Matching logic will go here
                         },
                       ),
