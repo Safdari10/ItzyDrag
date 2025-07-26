@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // Game instructions or success message
             Text(
               _isDropped
-                  ? 'Great job! You dropped the box!'
+                  ? 'Great job! You matched all the animals!'
                   : 'Drag the animal into its home.',
               style: Theme.of(context).textTheme.titleLarge,
             ),
