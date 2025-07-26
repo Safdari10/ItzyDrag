@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+final List<Map<String, String>> animalHomePairs = [
+  {"animal": "assets/images/cat.jpg", "home": "assets/images/house.jpg"},
+  {"animal": "assets/images/dog.jpg", "home": "assets/images/kennel.jpg"},
+  {"animal": "assets/images/bird.jpg", "home": "assets/images/nest.jpg"},
+];
+
 void main() {
   runApp(const MyApp());
 }
