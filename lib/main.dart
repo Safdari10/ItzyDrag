@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:audioplayers/audioplayers.dart";
 import 'package:itzy_drag/widgets/animal_draggable.dart';
 import 'package:itzy_drag/widgets/home_target.dart';
 
@@ -40,6 +41,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool _isDropped = false;
   List<String> matchedAnimals = []; // to store the matched animals
+  static final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +85,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     return HomeTarget(
                       homeImage: pair["home"]!,
                       expectedAnimal: pair["animal"]!,
-                      onMatched: (animal) {
+                      onMatched: (animal) async {
                         setState(() {
                           matchedAnimals.add(animal);
                           if (matchedAnimals.length == animalHomePairs.length) {
                             _isDropped = true;
                           }
                         });
+                        if (matchedAnimals.length == animalHomePairs.length) {
+                          await player.play(
+                            AssetSource('sounds/levelfinish.mp3'),
+                          );
+                        }
                       },
                     );
                   }).toList(),
