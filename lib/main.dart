@@ -3,9 +3,9 @@ import 'package:itzy_drag/widgets/animal_draggable.dart';
 import 'package:itzy_drag/widgets/home_target.dart';
 
 final List<Map<String, String>> animalHomePairs = [
-  {"animal": "assets/images/cat.jpg", "home": "assets/images/house.jpg"},
-  {"animal": "assets/images/dog.jpg", "home": "assets/images/kennel.jpg"},
-  {"animal": "assets/images/bird.jpg", "home": "assets/images/nest.jpg"},
+  {"animal": "assets/images/cat.png", "home": "assets/images/house.png"},
+  {"animal": "assets/images/dog.png", "home": "assets/images/kennel.png"},
+  {"animal": "assets/images/bird.png", "home": "assets/images/nest.png"},
 ];
 
 void main() {
