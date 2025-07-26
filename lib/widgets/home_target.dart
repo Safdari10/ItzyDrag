@@ -33,7 +33,25 @@ class HomeTarget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: DragTarget<String>(
         builder: (context, candidateData, rejectedData) {
-          return Image.asset(homeImage, width: 80, height: 80);
+          final isActive = candidateData.isNotEmpty;
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isActive ? Colors.green : Colors.transparent,
+                width: 4,
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                homeImage,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
         },
         onAcceptWithDetails: (details) {
           if (details.data == expectedAnimal) {
